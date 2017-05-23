@@ -8,6 +8,10 @@ Installation of the dependencies can be done with pip:
 
 `pip install -r requirements.txt`
 
+## Configs
+
+A config.ini is required to run the bot which contains keys and settings. This is where you must set your reddit OAuth2 keys, Twitter API (if using `vos`), target subreddit, and dxp weekend information. Refer to sampleConfig.ini.
+
 ## Usage
 
 The bot is designed to be run from a command-line interface taking arguments. Tasks are supposed to run periodically to push updates to a subreddit, however there is no
@@ -21,13 +25,13 @@ Get the latest RuneScape news from the website and update the sidebar.
 
 ### Time
 
-Update a sidebar click with the current UTC (in-game) time.
+Get the current UTC (in-game) time and update the sidebar.
 
 `time`
 
 ### Voice of Seren
 
-Retrieve the current active Voice of Seren and update the sidebar.
+Get the current active Voice of Seren and update the sidebar.
 
 `vos`
 
@@ -41,7 +45,6 @@ Update the sidebar with the amount of time remaining (or to start) in a double X
 ## Credits
 
 Author: zpoon (@ZPUNS)
-
 
 ## License
 
