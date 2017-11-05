@@ -11,8 +11,8 @@ Installation of the dependencies can be done with pip:
 ## Configs
 
 A config.json file is required to run the bot which contains reddit and twitter keys. This is where you must set your reddit OAuth2 keys, Twitter API (if using `--vos`), target subreddit, and dxp weekend information.
-
-`{
+```
+{
     "reddit": {
         "client_id": "CLIENT_ID",
         "secret": "SECRET",
@@ -27,8 +27,8 @@ A config.json file is required to run the bot which contains reddit and twitter 
         "access_token": "ACCESS_TOKEN",
         "access_token_secret": "ACCESS_TOKEN_SECRET"
     }
-}`
-
+}
+```
 ## Usage
 
 The bot is designed to be run from a command-line interface taking arguments. Tasks are supposed to run periodically to push updates to a subreddit, however there is no native scheduler or timer built into the bot. This allows you to utilize your own scheduler solutions (scripts, cron, services etc.)
