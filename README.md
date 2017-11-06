@@ -1,12 +1,12 @@
 # RSSubBot (WIP)
 
-A reddit CLI bot that handles an assortment of RuneScape-related tasks.
+A reddit command-line interface bot that handles an assortment of RuneScape-related tasks.
 
 ## Installation
 
-Installation of the dependencies can be done with pip:
+Installation of the dependencies can be done with `pip`:
 
-`pip install -r requirements.txt`
+`$ pip install -r requirements.txt`
 
 ## Configs
 
@@ -33,30 +33,43 @@ A `config.json` file is required to run the bot which contains reddit and twitte
 
 The bot is designed to be run from a command-line interface taking arguments. Tasks are supposed to run periodically to push updates to a subreddit, however at this time there is no native scheduler or timer built into the bot. This allows you to utilize your own scheduler solutions (scripts, cron, services etc.)
 
+Sidebar updates are made using a delimiter pre-positioned in a subreddit sidebar to define where content is to be inserted. 
+
+For example, Voice of Seren (`--vos`) uses the `[](/vos)` and `[](/vos-end)` delimiters to define where the bot should insert content.
+```
+[](/vos)
+
+## Voice of Seren 
+ 
+ 1. [Cadarn](https://twitter.com/JagexClock#cadarn) 
+ 2. [Crwys](https://twitter.com/JagexClock#crwys) 
+ 
+[](/vos-end)
+```
+
 ### News
 
-Get the latest RuneScape news from the website and update the sidebar.
+Get the latest RuneScape news from the website and update the sidebar. Uses the `[](/news)` delimiter.
 
-`--news`
+`$.. --news`
 
-### Time
+### Clock
 
-Get the current UTC (in-game) time and update the sidebar.
+Get the current UTC (in-game) time and update the sidebar. Uses the `[](/clock)` delimiter.
 
-`--time`
+`$.. --clock`
 
 ### Voice of Seren
 
-Get the current active Voice of Seren and update the sidebar.
+Get the current active Voice of Seren and update the sidebar. Uses the `[](/vos)` delimiter.
 
-`--vos`
+`$.. --vos`
 
 ### DXP (WIP)
 
-Update the sidebar with the amount of time remaining (or to start) in a double XP weekend.
+Update the sidebar with the amount of time remaining (or to start) in a double XP weekend. Uses the `[](/dxp)` delimiter.
 
-`--dxp`
-
+`$.. --dxp`
 
 ## Credits
 
