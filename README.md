@@ -1,4 +1,4 @@
-# RSSubBot (WIP)
+# RSSubBot
 
 A reddit command-line interface bot that handles an assortment of RuneScape-related tasks.
 
@@ -26,6 +26,12 @@ A `config.json` file is required to run the bot which contains reddit and twitte
         "consumer_secret": "CONSUMER_SECRET",
         "access_token": "ACCESS_TOKEN",
         "access_token_secret": "ACCESS_TOKEN_SECRET"
+    },
+    "dxp": {
+        "start": "Jan 1 2017 12:00PM",
+        "end": "Jan 3 2017 12:00PM",
+        "news_url": "NEWS_URL",
+        "portables_url": "PORTABLES_URL"
     }
 }
 ```
@@ -65,7 +71,7 @@ Get the current active Voice of Seren and update the sidebar. Uses the `[](/vos)
 
 `$.. --vos`
 
-### DXP (WIP)
+### Dxp
 
 Update the sidebar with the amount of time remaining (or to start) in a double XP weekend. Uses the `[](/dxp)` delimiter.
 
