@@ -12,5 +12,11 @@
         "consumer_secret": "CONSUMER_SECRET",
         "access_token": "ACCESS_TOKEN",
         "access_token_secret": "ACCESS_TOKEN_SECRET"
+    },
+    "dxp": {
+        "start": "Jan 1 2017 12:00PM",
+        "end": "Jan 3 2017 12:00PM",
+        "news_url": "NEWS_URL",
+        "portables_url": "PORTABLES_URL"
     }
 }

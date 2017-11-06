@@ -9,6 +9,7 @@ import praw
 import tweepy
 import feedparser
 from dateutil.relativedelta import relativedelta
+from dateutil import parser
 
 def get_config():
     """Load the config from config.json"""
@@ -129,51 +130,51 @@ def get_latest_news():
                 matches[0].published + '\n \n'
 
 
-def get_dxp(start, end, url):
+def get_dxp(start, end, news_url, portables_url):
     """Calculate the time until the start or end of a Double XP Weekend"""
     utc_time = datetime.utcnow()
-    if utc_time < datetime(start):
-        delta = relativedelta(datetime(start), utc_time)
+    start_date = parser.parse(start)
+    end_date = parser.parse(end)
+    if utc_time < start_date:
+        delta = relativedelta(start_date, utc_time)
         if delta.days >= 1:
-            return '1. [DXP Weekend starts in: **%(days)d day, %(hours)d hours**](' + url + \
-                    '#dxp) \n \n 2. [Portables & Boxes FC Information](https://redd.it/5uf7rt#dxp) \n' \
-                    % delta.__dict__
-        return '1. [DXP Weekend starts in: **%(hours)d hours**](' + url + \
-                '#dxp) \n \n2. [Portables & Boxes FC Information](https://redd.it/5uf7rt#dxp) \n' \
-                % delta.__dict__
-    elif utc_time > datetime(end):
+            return '1. [DXP Weekend starts in: **%(days)d day, %(hours)d hours**](' \
+                    % delta.__dict__ + news_url + \
+                    '#dxp) \n \n 2. [Portables & Boxes FC Information](' + portables_url + ') \n'
+        return '1. [DXP Weekend starts in: **%(hours)d hours**](' \
+                % delta.__dict__ + news_url + \
+                '#dxp) \n \n2. [Portables & Boxes FC Information](' + portables_url + ') \n'
+    elif utc_time > end_date:
         return '1. DXP Weekend has ended.'
     else:
-        delta = relativedelta(datetime(end), utc_time)
+        delta = relativedelta(end_date, utc_time)
         if delta.days > 1:
-            return '1. [DXP Weekend is LIVE: **%(days)d days, %(hours)d hours to go**](' + url + \
-                    '#dxp) \n \n2. [Portables & Boxes FC Information](https://redd.it/5uf7rt#dxp) \n' \
-                    % delta.__dict__
+            return '1. [DXP Weekend is LIVE: **%(days)d days, %(hours)d hours to go**]('  \
+                    % delta.__dict__ + news_url + \
+                    '#dxp) \n \n2. [Portables & Boxes FC Information](' + portables_url + ') \n'
         elif delta.days == 1:
-            return '1. [DXP Weekend is LIVE: **%(days)d day, %(hours)d hours to go**](' + url + \
-                    '#dxp) \n \n2. [Portables & Boxes FC Information](https://redd.it/5uf7rt#dxp) \n' \
-                    % delta.__dict__
-        return '1. [DXP Weekend is LIVE: **%(hours)d hours to go**](' + url + \
-                '#dxp) \n \n2. [Portables & Boxes FC Information](https://redd.it/5uf7rt#dxp) \n' \
-                % delta.__dict__
+            return '1. [DXP Weekend is LIVE: **%(days)d day, %(hours)d hours to go**](' \
+                    % delta.__dict__ + news_url + \
+                    '#dxp) \n \n2. [Portables & Boxes FC Information](' + portables_url + ') \n'
+        return '1. [DXP Weekend is LIVE: **%(hours)d hours to go**](' \
+                % delta.__dict__ + news_url + \
+                '#dxp) \n \n2. [Portables & Boxes FC Information](' + portables_url + ') \n'
 
 def main():
     """Main function"""
     config = get_config()
     reddit = init_reddit(config)
     subreddit = config['reddit']['subreddit']
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--clock", help="set sidebar with the current time (utc)",
-                        action="store_true")
-    parser.add_argument("--vos", help="set sidebar with the current Voice of Seren",
-                        action="store_true")
-    parser.add_argument("--dxp", help="set sidebar with time until the end of dxp",
-                        action="store_true")
-    parser.add_argument("--news", help="set sidebar with the last 3 RuneScape news",
-                        action="store_true")
-    parser.add_argument("-q", "--quiet", help="run with no outputs",
-                        action="store_true")
-    args = parser.parse_args()
+    arg = argparse.ArgumentParser()
+    arg.add_argument("--clock", help="set sidebar with the current time (utc)",
+                     action="store_true")
+    arg.add_argument("--vos", help="set sidebar with the current Voice of Seren",
+                     action="store_true")
+    arg.add_argument("--dxp", help="set sidebar with time until the end of dxp",
+                     action="store_true")
+    arg.add_argument("--news", help="set sidebar with the last 3 RuneScape news",
+                     action="store_true")
+    args = arg.parse_args()
 
     if args.clock:
         push_sidebar_update(reddit,
@@ -196,6 +197,15 @@ def main():
                             get_latest_news(),
                             subreddit)
         print "Successfully ran --news"
+    if args.dxp:
+        push_sidebar_update(reddit,
+                            'dxp',
+                            get_dxp(config['dxp']['start'],
+                                    config['dxp']['end'],
+                                    config['dxp']['news_url'],
+                                    config['dxp']['portables_url']),
+                            subreddit)
+        print "Successfully ran --dxp"
 
 if __name__ == "__main__":
     main()
