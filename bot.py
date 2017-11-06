@@ -160,6 +160,7 @@ def get_dxp(start, end, url):
 def main():
     """Main function"""
     config = get_config()
+    reddit = init_reddit(config)
     subreddit = config['reddit']['subreddit']
     parser = argparse.ArgumentParser()
     parser.add_argument("--clock", help="set sidebar with the current time (utc)",
@@ -175,13 +176,14 @@ def main():
     args = parser.parse_args()
 
     if args.clock:
-        push_sidebar_update(init_reddit(config),
+        push_sidebar_update(reddit,
                             'clock',
                             get_time(),
                             subreddit)
         print "Successfully ran --clock"
     if args.vos:
-        push_sidebar_update(init_reddit(config), 'vos',
+        push_sidebar_update(reddit,
+                            'vos',
                             get_active_vos(config['twitter']['consumer_key'],
                                            config['twitter']['consumer_secret'],
                                            config['twitter']['access_token'],
@@ -189,7 +191,7 @@ def main():
                             subreddit)
         print "Successfully ran --vos"
     if args.news:
-        push_sidebar_update(init_reddit(config),
+        push_sidebar_update(reddit,
                             'news',
                             get_latest_news(),
                             subreddit)
