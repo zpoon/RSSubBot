@@ -39,6 +39,8 @@ A `config.json` file is required to run the bot which contains reddit and twitte
 
 The bot is designed to be run from a command-line interface taking arguments. Tasks are supposed to run periodically to push updates to a subreddit, however at this time there is no native scheduler or timer built into the bot. This allows you to utilize your own scheduler solutions (scripts, cron, services etc.)
 
+The bot's reddit account will need to be on the moderator list of the specific subreddit and at least have the `config` scope.
+
 Sidebar updates are made using a delimiter pre-positioned in a subreddit sidebar to define where content is to be inserted. 
 
 For example, Voice of Seren (`--vos`) uses the `[](/vos)` and `[](/vos-end)` delimiters to define where the bot should insert content.
