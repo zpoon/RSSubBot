@@ -2,7 +2,6 @@
 import re
 import HTMLParser
 from datetime import datetime
-import os
 import json
 import argparse
 import praw
@@ -13,12 +12,12 @@ from dateutil import parser
 
 def get_config():
     """Load the config from config.json"""
-    if not os.path.isfile('config.json'):
-        print "Error: Missing config.json file"
-    else:
+    try:
         with open('config.json') as json_data_file:
             config = json.load(json_data_file)
             return config
+    except IOError:
+        raise IOError("Missing or unreadable config.json file")
 
 def init_reddit(config):
     """Initialize the Reddit praw object"""
@@ -97,6 +96,8 @@ def get_latest_news():
     """Access the RuneScape News RSS feed and retrieve the 3 most recent news articles"""
     news = feedparser.parse(
         'http://services.runescape.com/m=news/latest_news.rss')
+    if news.bozo:
+        raise news.bozo_exception
     matches = []
     if news:
         for item in news.entries:
@@ -177,35 +178,51 @@ def main():
     args = arg.parse_args()
 
     if args.clock:
-        push_sidebar_update(reddit,
-                            'clock',
-                            get_time(),
-                            subreddit)
-        print "Successfully ran --clock"
+        try:
+            push_sidebar_update(reddit,
+                                'clock',
+                                get_time(),
+                                subreddit)
+        except ValueError:
+            raise ValueError
+        else:
+            print "'clock' completed and pushed to %s" % subreddit
     if args.vos:
-        push_sidebar_update(reddit,
-                            'vos',
-                            get_active_vos(config['twitter']['consumer_key'],
-                                           config['twitter']['consumer_secret'],
-                                           config['twitter']['access_token'],
-                                           config['twitter']['access_token_secret']),
-                            subreddit)
-        print "Successfully ran --vos"
+        try:
+            push_sidebar_update(reddit,
+                                'vos',
+                                get_active_vos(config['twitter']['consumer_key'],
+                                               config['twitter']['consumer_secret'],
+                                               config['twitter']['access_token'],
+                                               config['twitter']['access_token_secret']),
+                                subreddit)
+        except ValueError:
+            raise ValueError
+        else:
+            print "'vos' completed and pushed to %s" % subreddit
     if args.news:
-        push_sidebar_update(reddit,
-                            'news',
-                            get_latest_news(),
-                            subreddit)
-        print "Successfully ran --news"
+        try:
+            push_sidebar_update(reddit,
+                                'news',
+                                get_latest_news(),
+                                subreddit)
+        except ValueError:
+            raise ValueError
+        else:
+            print "'news' completed and pushed to %s" % subreddit
     if args.dxp:
-        push_sidebar_update(reddit,
-                            'dxp',
-                            get_dxp(config['dxp']['start'],
-                                    config['dxp']['end'],
-                                    config['dxp']['news_url'],
-                                    config['dxp']['portables_url']),
-                            subreddit)
-        print "Successfully ran --dxp"
+        try:
+            push_sidebar_update(reddit,
+                                'dxp',
+                                get_dxp(config['dxp']['start'],
+                                        config['dxp']['end'],
+                                        config['dxp']['news_url'],
+                                        config['dxp']['portables_url']),
+                                subreddit)
+        except ValueError:
+            raise ValueError
+        else:
+            print "'dxp' completed and pushed to %s" % subreddit
 
 if __name__ == "__main__":
     main()
