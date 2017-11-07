@@ -1,6 +1,9 @@
 """Python reddit bot that automates an assortment of RuneScape-related tasks"""
 import re
-import HTMLParser
+try:
+    import html.parser
+except ImportError:
+    import HTMLParser
 from datetime import datetime
 import json
 import argparse
@@ -33,7 +36,10 @@ def push_sidebar_update(reddit, section, content, target_subreddit):
     """Retrieve a subreddit's current sidebar, and insert new content"""
     subreddit = reddit.subreddit(target_subreddit)
     current_sidebar = subreddit.description
-    current_sidebar = HTMLParser.HTMLParser().unescape(current_sidebar)
+    try:
+        current_sidebar = html.parser.HTMLParser().unescape(current_sidebar)
+    except NameError:
+        current_sidebar = HTMLParser.HTMLParser().unescape(current_sidebar)
     replace_pattern = re.compile(
         '%s.*?%s' %
         (re.escape(
@@ -186,7 +192,7 @@ def main():
         except ValueError:
             raise ValueError
         else:
-            print "'clock' completed and pushed to %s" % subreddit
+            print("'clock' completed and pushed to %s" % subreddit)
     if args.vos:
         try:
             push_sidebar_update(reddit,
@@ -199,7 +205,7 @@ def main():
         except ValueError:
             raise ValueError
         else:
-            print "'vos' completed and pushed to %s" % subreddit
+            print("'vos' completed and pushed to %s" % subreddit)
     if args.news:
         try:
             push_sidebar_update(reddit,
@@ -209,7 +215,7 @@ def main():
         except ValueError:
             raise ValueError
         else:
-            print "'news' completed and pushed to %s" % subreddit
+            print("'news' completed and pushed to %s" % subreddit)
     if args.dxp:
         try:
             push_sidebar_update(reddit,
@@ -222,7 +228,7 @@ def main():
         except ValueError:
             raise ValueError
         else:
-            print "'dxp' completed and pushed to %s" % subreddit
+            print("'dxp' completed and pushed to %s" % subreddit)
 
 if __name__ == "__main__":
     main()
