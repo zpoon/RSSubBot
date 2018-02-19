@@ -147,7 +147,7 @@ def get_dxp(start, end, news_url, portables_url):
         if delta.days >= 1:
             return '1. [DXP Weekend starts in: **%(days)d day, %(hours)d hours**](' \
                     % delta.__dict__ + news_url + \
-                    '#dxp) \n \n 2. [Portables & Boxes FC Information](' + portables_url + ') \n'
+                    '#dxp) \n \n2. [Portables & Boxes FC Information](' + portables_url + ') \n'
         return '1. [DXP Weekend starts in: **%(hours)d hours**](' \
                 % delta.__dict__ + news_url + \
                 '#dxp) \n \n2. [Portables & Boxes FC Information](' + portables_url + ') \n'
