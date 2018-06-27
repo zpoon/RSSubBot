@@ -1,5 +1,7 @@
 """Python reddit bot that automates an assortment of RuneScape-related tasks"""
 import re
+import os
+import errno
 try:
     import html.parser
 except ImportError:
@@ -167,6 +169,22 @@ def get_dxp(start, end, news_url, portables_url):
                 % delta.__dict__ + news_url + \
                 '#dxp) \n \n2. [Portables & Boxes FC Information](' + portables_url + ') \n'
 
+def save_wiki(reddit, target_subreddit):
+    """Save a wiki's content to disk"""
+    for wikipage in reddit.subreddit(target_subreddit).wiki:
+        filename = wikipage.name + ".md"
+        if not os.path.exists(os.path.dirname(filename)) and not os.path.dirname(filename) == '':
+            try:
+                os.makedirs(os.path.dirname(filename))
+            except OSError as exc: # Guard against race condition
+                if exc.errno != errno.EEXIST:
+                    raise
+        page_content = wikipage.content_md.encode('utf-8')
+        with open(filename, 'w') as file:
+            file.write(page_content)
+        print("Saved %s" % wikipage)
+
+
 def main():
     """Main function"""
     config = get_config()
@@ -180,6 +198,8 @@ def main():
     arg.add_argument("--dxp", help="set sidebar with time until the end of dxp",
                      action="store_true")
     arg.add_argument("--news", help="set sidebar with the last 3 RuneScape news",
+                     action="store_true")
+    arg.add_argument("--wiki", help="download the subreddit's wiki pages",
                      action="store_true")
     args = arg.parse_args()
 
@@ -229,6 +249,8 @@ def main():
             raise ValueError
         else:
             print("'dxp' completed and pushed to %s" % subreddit)
+    if args.wiki:
+        save_wiki(reddit, subreddit)
 
 if __name__ == "__main__":
     main()
