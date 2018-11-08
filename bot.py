@@ -184,6 +184,13 @@ def save_wiki(reddit, target_subreddit):
             file.write(page_content)
         print("Saved %s" % wikipage)
 
+def get_traffic(reddit, target_subreddit):
+    """Save a subreddit's traffic as json file"""
+    traffic = reddit.subreddit(target_subreddit).traffic();
+    with open("traffic.json", 'w') as file:
+        file.write(json.dumps(traffic));
+    return traffic;
+
 
 def main():
     """Main function"""
@@ -200,6 +207,8 @@ def main():
     arg.add_argument("--news", help="set sidebar with the last 3 RuneScape news",
                      action="store_true")
     arg.add_argument("--wiki", help="download the subreddit's wiki pages",
+                     action="store_true")
+    arg.add_argument("--traffic", help="get subreddits traffic",
                      action="store_true")
     args = arg.parse_args()
 
@@ -251,6 +260,11 @@ def main():
             print("'dxp' completed and pushed to %s" % subreddit)
     if args.wiki:
         save_wiki(reddit, subreddit)
+    if args.traffic:
+        try:
+            get_traffic(reddit, subreddit)
+        except ValueError:
+            raise ValueError
 
 if __name__ == "__main__":
     main()
