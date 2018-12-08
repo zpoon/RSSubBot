@@ -108,9 +108,12 @@ def get_latest_news():
         raise news.bozo_exception
     matches = []
     if news:
-        for item in news.entries:
-            if item.category == 'Game Update News':
-                matches.append(item)
+        try:
+            for item in news.entries:
+                if item.category == 'Game Update News':
+                    matches.append(item)
+        except AttributeError:
+            item.category = ""
         for item in matches:
             item.published = item.published.replace('00:00:00 GMT', '')
 
