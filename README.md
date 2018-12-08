@@ -79,6 +79,18 @@ Update the sidebar with the amount of time remaining (or to start) in a double X
 
 `$.. --dxp`
 
+### Wiki
+
+Gets a subreddit's entire wiki and saves it locally to disk.
+
+`$.. --wiki`
+
+### Traffic
+
+Gets a subreddit's traffic data as json and saves it locally to disk.
+
+`$.. --traffic`
+
 ## Credits
 
 Author: Nicholas Torkos (@ZPUNS)
@@ -87,7 +99,7 @@ Author: Nicholas Torkos (@ZPUNS)
 
 MIT License
 
-Copyright (c) 2017 Nicholas Torkos
+Copyright (c) 2018 Nicholas Torkos
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
