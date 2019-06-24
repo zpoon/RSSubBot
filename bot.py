@@ -15,6 +15,7 @@ import feedparser
 from dateutil.relativedelta import relativedelta
 from dateutil import parser
 
+
 def get_config():
     """Load the config from config.json"""
     try:
@@ -23,6 +24,7 @@ def get_config():
             return config
     except IOError:
         raise IOError("Missing or unreadable config.json file")
+
 
 def init_reddit(config):
     """Initialize the Reddit praw object"""
@@ -33,6 +35,7 @@ def init_reddit(config):
         username=config['reddit']['username'],
         user_agent=config['reddit']['user_agent']
     )
+
 
 def push_sidebar_update(reddit, section, content, target_subreddit):
     """Retrieve a subreddit's current sidebar, and insert new content"""
@@ -110,7 +113,7 @@ def get_latest_news():
     if news:
         try:
             for item in news.entries:
-                if item.category == 'Game Update News':
+                if item.category == 'Game Updates':
                     matches.append(item)
         except AttributeError:
             item.category = ""
@@ -172,6 +175,7 @@ def get_dxp(start, end, news_url, portables_url):
                 % delta.__dict__ + news_url + \
                 '#dxp) \n \n2. [Portables & Boxes FC Information](' + portables_url + ') \n'
 
+
 def save_wiki(reddit, target_subreddit):
     """Save a wiki's content to disk"""
     for wikipage in reddit.subreddit(target_subreddit).wiki:
@@ -186,6 +190,7 @@ def save_wiki(reddit, target_subreddit):
         with open(filename, 'w') as file:
             file.write(page_content)
         print("Saved %s" % wikipage)
+
 
 def get_traffic(reddit, target_subreddit):
     """Save a subreddit's traffic as json file"""
@@ -268,6 +273,7 @@ def main():
             get_traffic(reddit, subreddit)
         except ValueError:
             raise ValueError
+
 
 if __name__ == "__main__":
     main()
